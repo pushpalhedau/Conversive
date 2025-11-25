@@ -1,0 +1,44 @@
+# Backend
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+*.db
+*.sqlite
+*.sqlite3
+instance/
+.pytest_cache/
+.coverage
+htmlcov/
+.env
+
+# Frontend
+node_modules/
+dist/
+.DS_Store
+*.local
+.env.local
+.env.production.local
+.vite
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

@@ -1,0 +1,245 @@
+{
+    "project": "Stock Management System",
+    "version": "1.0.0",
+    "stack": {
+        "backend": {
+            "language": "Python 3.11+",
+            "framework": "Flask",
+            "database": "MySQL",
+            "orm": "SQLAlchemy",
+            "deployment": "Render"
+        },
+        "frontend": {
+            "framework": "React",
+            "language": "TypeScript",
+            "build_tool": "Vite",
+            "state_management": "Redux Toolkit + RTK Query",
+            "styling": "Tailwind CSS",
+            "deployment": "Vercel"
+        }
+    },
+    "database": {
+        "schema": {
+            "product": {
+                "columns": [
+                    {
+                        "name": "id",
+                        "type": "INT",
+                        "constraints": "PK, Auto-increment"
+                    },
+                    {
+                        "name": "name",
+                        "type": "VARCHAR(255)",
+                        "constraints": "Unique, Not Null"
+                    },
+                    {
+                        "name": "description",
+                        "type": "TEXT",
+                        "constraints": "Nullable"
+                    },
+                    {
+                        "name": "price",
+                        "type": "DECIMAL(10, 2)",
+                        "constraints": "Not Null"
+                    },
+                    {
+                        "name": "total_quantity",
+                        "type": "INT",
+                        "constraints": "Not Null"
+                    },
+                    {
+                        "name": "available_quantity",
+                        "type": "INT",
+                        "constraints": "Not Null"
+                    },
+                    {
+                        "name": "need_restock",
+                        "type": "BOOLEAN",
+                        "constraints": "Default False"
+                    }
+                ]
+            }
+        },
+        "seed_data": [
+            {
+                "name": "Wireless Mouse",
+                "description": "Ergonomic wireless mouse with 2.4GHz connection",
+                "price": 29.99,
+                "total_quantity": 100,
+                "available_quantity": 85,
+                "need_restock": false
+            },
+            {
+                "name": "Mechanical Keyboard",
+                "description": "RGB mechanical keyboard with Blue switches",
+                "price": 89.99,
+                "total_quantity": 50,
+                "available_quantity": 5,
+                "need_restock": true
+            },
+            {
+                "name": "USB-C Cable",
+                "description": "2-meter braided USB-C charging cable",
+                "price": 12.50,
+                "total_quantity": 200,
+                "available_quantity": 190,
+                "need_restock": false
+            },
+            {
+                "name": "Monitor Stand",
+                "description": "Adjustable aluminum monitor stand",
+                "price": 45.00,
+                "total_quantity": 30,
+                "available_quantity": 2,
+                "need_restock": true
+            },
+            {
+                "name": "Webcam 1080p",
+                "description": "Full HD webcam with noise-canceling microphone",
+                "price": 59.99,
+                "total_quantity": 75,
+                "available_quantity": 40,
+                "need_restock": false
+            },
+            {
+                "name": "Gaming Headset",
+                "description": "Surround sound gaming headset with mic",
+                "price": 65.00,
+                "total_quantity": 60,
+                "available_quantity": 10,
+                "need_restock": true
+            },
+            {
+                "name": "Laptop Sleeve",
+                "description": "Protective sleeve for 15-inch laptops",
+                "price": 19.99,
+                "total_quantity": 120,
+                "available_quantity": 115,
+                "need_restock": false
+            },
+            {
+                "name": "External SSD 1TB",
+                "description": "Portable 1TB SSD USB 3.2",
+                "price": 129.99,
+                "total_quantity": 40,
+                "available_quantity": 35,
+                "need_restock": false
+            }
+        ]
+    },
+    "api": {
+        "base_url": "/api",
+        "endpoints": [
+            {
+                "method": "POST",
+                "path": "/products",
+                "description": "Create a product"
+            },
+            {
+                "method": "GET",
+                "path": "/products",
+                "description": "List all products"
+            },
+            {
+                "method": "GET",
+                "path": "/products/{id}",
+                "description": "Get product details"
+            },
+            {
+                "method": "PUT",
+                "path": "/products/{id}",
+                "description": "Update product"
+            },
+            {
+                "method": "DELETE",
+                "path": "/products/{id}",
+                "description": "Delete product"
+            },
+            {
+                "method": "GET",
+                "path": "/restock/list",
+                "description": "List items needing restock"
+            },
+            {
+                "method": "PUT",
+                "path": "/restock/update/{id}",
+                "description": "Manual override restock"
+            },
+            {
+                "method": "GET",
+                "path": "/health",
+                "description": "Health check"
+            }
+        ]
+    },
+    "tasks": [
+        {
+            "id": "A",
+            "title": "Architecture & Repo Scaffolding",
+            "priority": "HIGH",
+            "complexity": "MEDIUM",
+            "acceptance_criteria": "Repos created, folder structure set, READMEs added, .env.example created.",
+            "outputs": [
+                "backend/",
+                "frontend/",
+                "docker-compose.yml",
+                "README.md"
+            ]
+        },
+        {
+            "id": "B",
+            "title": "Backend Core APIs + Migrations",
+            "priority": "HIGH",
+            "complexity": "LARGE",
+            "acceptance_criteria": "Flask app running, DB connected, Product model created, Migrations run, CRUD APIs working.",
+            "outputs": [
+                "backend/app/models/product.py",
+                "backend/app/api/products.py",
+                "backend/migrations/"
+            ]
+        },
+        {
+            "id": "C",
+            "title": "Frontend Skeleton + RTK Query",
+            "priority": "HIGH",
+            "complexity": "LARGE",
+            "acceptance_criteria": "React app running, RTK Query setup, Product list & Add Product forms working.",
+            "outputs": [
+                "frontend/src/features/products/",
+                "frontend/src/services/api.ts"
+            ]
+        },
+        {
+            "id": "D",
+            "title": "Docker + Local Dev",
+            "priority": "MEDIUM",
+            "complexity": "MEDIUM",
+            "acceptance_criteria": "docker-compose up starts all services, hot-reload works.",
+            "outputs": [
+                "docker-compose.yml",
+                "backend/Dockerfile"
+            ]
+        },
+        {
+            "id": "E",
+            "title": "Tests + CI",
+            "priority": "MEDIUM",
+            "complexity": "MEDIUM",
+            "acceptance_criteria": "Unit tests for backend/frontend, GitHub Actions workflows for lint/test.",
+            "outputs": [
+                "backend/tests/",
+                ".github/workflows/"
+            ]
+        },
+        {
+            "id": "F",
+            "title": "Deployment & Docs",
+            "priority": "LOW",
+            "complexity": "MEDIUM",
+            "acceptance_criteria": "Backend on Render, Frontend on Vercel, Live URL working.",
+            "outputs": [
+                "Deployment"
+            ]
+        }
+    ]
+}
