@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from '../ui/Modal';
+import { Button } from '../ui/Button';
 import { productService } from '../../services/productService';
+import { ShieldCheck, User, Lock, AlertCircle } from 'lucide-react';
 
 interface AdminLoginModalProps {
     isOpen: boolean;
@@ -32,24 +34,26 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
         }
     };
 
+    const modalTitle = (
+        <>
+            <ShieldCheck className="w-6 h-6" />
+            Admin Login
+        </>
+    );
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="Admin Login">
-            <form onSubmit={handleSubmit} style={{ padding: '20px' }}>
+        <Modal isOpen={isOpen} onClose={onClose} title={modalTitle}>
+            <form onSubmit={handleSubmit} className="form-container">
                 {error && (
-                    <div style={{
-                        padding: '10px',
-                        marginBottom: '16px',
-                        backgroundColor: 'rgba(249, 199, 79, 0.1)',
-                        border: '1px solid var(--color-yellow)',
-                        borderRadius: '6px',
-                        color: 'var(--color-yellow)'
-                    }}>
+                    <div className="error-message">
+                        <AlertCircle className="w-4 h-4" />
                         {error}
                     </div>
                 )}
 
-                <div style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
+                <div className="form-group">
+                    <label className="form-label form-label-required">
+                        <User className="w-4 h-4" />
                         Username
                     </label>
                     <input
@@ -57,20 +61,16 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
-                        style={{
-                            width: '100%',
-                            padding: '10px',
-                            borderRadius: '6px',
-                            border: '1px solid rgba(255, 255, 255, 0.2)',
-                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                            color: 'white',
-                            fontSize: '14px'
-                        }}
+                        className="form-input"
+                        placeholder="Enter your username"
+                        autoComplete="username"
+                        disabled={loading}
                     />
                 </div>
 
-                <div style={{ marginBottom: '24px' }}>
-                    <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
+                <div className="form-group">
+                    <label className="form-label form-label-required">
+                        <Lock className="w-4 h-4" />
                         Password
                     </label>
                     <input
@@ -78,51 +78,32 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        style={{
-                            width: '100%',
-                            padding: '10px',
-                            borderRadius: '6px',
-                            border: '1px solid rgba(255, 255, 255, 0.2)',
-                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                            color: 'white',
-                            fontSize: '14px'
-                        }}
+                        className="form-input"
+                        placeholder="Enter your password"
+                        autoComplete="current-password"
+                        disabled={loading}
                     />
+                    <span className="form-hint">
+                        Default credentials: rentfate / Pass@123
+                    </span>
                 </div>
 
-                <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-                    <button
+                <div className="form-actions">
+                    <Button
                         type="button"
+                        variant="secondary"
                         onClick={onClose}
                         disabled={loading}
-                        className="btn"
-                        style={{
-                            padding: '10px 20px',
-                            borderRadius: '6px',
-                            border: '1px solid rgba(255, 255, 255, 0.2)',
-                            backgroundColor: 'transparent',
-                            color: 'white',
-                            cursor: 'pointer'
-                        }}
                     >
                         Cancel
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         type="submit"
+                        variant="primary"
                         disabled={loading}
-                        className="btn btn-primary"
-                        style={{
-                            padding: '10px 20px',
-                            borderRadius: '6px',
-                            backgroundColor: 'var(--color-teal-light)',
-                            color: 'white',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontWeight: '600'
-                        }}
                     >
                         {loading ? 'Logging in...' : 'Login'}
-                    </button>
+                    </Button>
                 </div>
             </form>
         </Modal>

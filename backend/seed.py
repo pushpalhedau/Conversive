@@ -11,11 +11,20 @@ with app.app_context():
     db.create_all()
 
     # Seed Admin User
+    # Seed Admin User
     if not User.query.filter_by(username='Pushpal').first():
         admin = User(username='Pushpal')
         admin.set_password('Password')
         db.session.add(admin)
-        print("Admin user created.")
+        print("Admin user 'Pushpal' created.")
+
+    if not User.query.filter_by(username='rentfate').first():
+        admin2 = User(username='rentfate')
+        admin2.set_password('Pass@123')
+        db.session.add(admin2)
+        print("Admin user 'rentfate' created.")
+    
+    db.session.commit()
 
     # Seed Products
     if Product.query.count() == 0:

@@ -1,4 +1,4 @@
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, CheckCircle } from 'lucide-react';
 
 interface StatusBadgeProps {
     status: 'in-stock' | 'restock';
@@ -14,5 +14,10 @@ export const StatusBadge = ({ status }: StatusBadgeProps) => {
         );
     }
 
-    return <span className="status-badge in-stock">In Stock</span>;
+    return (
+        <span className="status-badge in-stock">
+            <CheckCircle className="w-3 h-3" />
+            In Stock
+        </span>
+    );
 };

@@ -97,18 +97,17 @@ export function AdminDashboard() {
 
     if (loading) {
         return (
-            <div className="app-container flex items-center justify-center" style={{ minHeight: '100vh' }}>
-                <div style={{ fontSize: '1.25rem', color: 'rgba(255, 255, 255, 0.8)' }}>
-                    Loading products...
-                </div>
+            <div className="loading-container">
+                <div className="spinner"></div>
+                <div>Loading products...</div>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="app-container flex items-center justify-center" style={{ minHeight: '100vh' }}>
-                <div style={{ color: 'var(--color-yellow)', fontSize: '1.25rem' }}>
+            <div className="loading-container">
+                <div style={{ color: 'var(--color-yellow-restock)', fontSize: '1.25rem' }}>
                     Error: {error}
                 </div>
             </div>
@@ -117,26 +116,20 @@ export function AdminDashboard() {
 
     return (
         <div className="app-container">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 0 20px 0' }}>
-                <div></div>
+            <div className="page-header">
+                <h1 className="page-title">Admin Dashboard</h1>
                 <button
                     onClick={handleLogout}
-                    style={{
-                        padding: '8px 16px',
-                        backgroundColor: 'rgba(249, 199, 79, 0.8)',
-                        color: 'var(--color-navy-primary)',
-                        border: 'none',
-                        borderRadius: '6px',
-                        fontSize: '14px',
-                        fontWeight: '600',
-                        cursor: 'pointer'
-                    }}
+                    className="btn btn-logout"
                 >
                     Logout & Back to Shop
                 </button>
             </div>
 
-            <Header onAddClick={() => { setEditingProduct(null); setShowForm(true); }} />
+            <Header
+                onAddProduct={() => { setEditingProduct(null); setShowForm(true); }}
+                showAddButton={currentView === 'products'}
+            />
             <Navigation currentView={currentView} onViewChange={setCurrentView} />
 
             {currentView === 'products' ? (
@@ -146,16 +139,16 @@ export function AdminDashboard() {
                     onDelete={handleDeleteProduct}
                 />
             ) : (
-                <RestockAlerts products={restockProducts} onResolve={handleResolveRestock} />
+                <RestockAlerts products={restockProducts} onMarkResolved={handleResolveRestock} />
             )}
 
-            {showForm && (
-                <ProductForm
-                    product={editingProduct}
-                    onSubmit={editingProduct ? handleEditProduct : handleAddProduct}
-                    onCancel={() => { setShowForm(false); setEditingProduct(null); }}
-                />
-            )}
+            <ProductForm
+                isOpen={showForm}
+                onClose={() => { setShowForm(false); setEditingProduct(null); }}
+                onSubmit={editingProduct ? handleEditProduct : handleAddProduct}
+                initialData={editingProduct ? { ...editingProduct, price: Number(editingProduct.price) } : undefined}
+                isEditing={!!editingProduct}
+            />
         </div>
     );
 }

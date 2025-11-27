@@ -1,4 +1,5 @@
 import type { View } from '../../types/product.types';
+import { Package, AlertTriangle } from 'lucide-react';
 
 interface NavigationProps {
     currentView: View;
@@ -13,12 +14,14 @@ export const Navigation = ({ currentView, onViewChange }: NavigationProps) => {
                     className={`tab ${currentView === 'products' ? 'active' : ''}`}
                     onClick={() => onViewChange('products')}
                 >
+                    <Package className="tab-icon" />
                     All Products
                 </button>
                 <button
                     className={`tab ${currentView === 'restock' ? 'active' : ''}`}
                     onClick={() => onViewChange('restock')}
                 >
+                    <AlertTriangle className="tab-icon" />
                     Restock Alerts
                 </button>
             </div>
