@@ -35,15 +35,27 @@ export const productService = {
      * Update an existing product
      */
     async updateProduct(id: number, productData: ProductFormData): Promise<Product> {
+        // Sanitize data to remove read-only fields like need_restock
+        const payload = {
+            name: productData.name,
+            description: productData.description,
+            price: productData.price,
+            total_quantity: productData.total_quantity,
+            available_quantity: productData.available_quantity,
+            image_url: productData.image_url,
+        };
+
         const response = await fetch(`${API_BASE_URL}/products/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(productData),
+            body: JSON.stringify(payload),
         });
         if (!response.ok) {
-            throw new Error('Failed to update product');
+            const errorData = await response.json().catch(() => ({}));
+            const errorMessage = errorData.message || JSON.stringify(errorData) || 'Failed to update product';
+            throw new Error(errorMessage);
         }
         return response.json();
     },

@@ -62,7 +62,7 @@ export function AdminDashboard() {
             setShowForm(false);
         } catch (err) {
             console.error('Error updating product:', err);
-            alert('Failed to update product');
+            alert(err instanceof Error ? err.message : 'Failed to update product');
         }
     };
 

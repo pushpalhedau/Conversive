@@ -83,9 +83,6 @@ export function AdminLoginModal({ isOpen, onClose }: AdminLoginModalProps) {
                         autoComplete="current-password"
                         disabled={loading}
                     />
-                    <span className="form-hint">
-                        Default credentials: rentfate / Pass@123
-                    </span>
                 </div>
 
                 <div className="form-actions">

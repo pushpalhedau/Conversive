@@ -3,6 +3,7 @@ from app.extensions import db
 from app.models.product import Product
 from app.models.user import User
 from app.services.stock_service import StockService
+import os
 
 app = create_app()
 
@@ -10,19 +11,26 @@ with app.app_context():
     print("Seeding database...")
     db.create_all()
 
-    # Seed Admin User
-    # Seed Admin User
-    if not User.query.filter_by(username='Pushpal').first():
-        admin = User(username='Pushpal')
-        admin.set_password('Password')
+    # Seed Admin Users from environment variables
+    admin_username = os.getenv('ADMIN_USERNAME', 'admin')
+    admin_password = os.getenv('ADMIN_PASSWORD', 'changeme')
+    
+    if not User.query.filter_by(username=admin_username).first():
+        admin = User(username=admin_username)
+        admin.set_password(admin_password)
         db.session.add(admin)
-        print("Admin user 'Pushpal' created.")
-
-    if not User.query.filter_by(username='rentfate').first():
-        admin2 = User(username='rentfate')
-        admin2.set_password('Pass@123')
-        db.session.add(admin2)
-        print("Admin user 'rentfate' created.")
+        print(f"Admin user '{admin_username}' created.")
+    
+    # Optional: Second admin user
+    admin_username_2 = os.getenv('ADMIN_USERNAME_2')
+    admin_password_2 = os.getenv('ADMIN_PASSWORD_2')
+    
+    if admin_username_2 and admin_password_2:
+        if not User.query.filter_by(username=admin_username_2).first():
+            admin2 = User(username=admin_username_2)
+            admin2.set_password(admin_password_2)
+            db.session.add(admin2)
+            print(f"Admin user '{admin_username_2}' created.")
     
     db.session.commit()
 
