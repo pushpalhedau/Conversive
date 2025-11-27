@@ -20,7 +20,8 @@ def create_product():
         description=data.get('description'),
         price=data['price'],
         total_quantity=data['total_quantity'],
-        available_quantity=data['available_quantity']
+        available_quantity=data['available_quantity'],
+        image_url=data.get('image_url')
     )
     
     # Calculate initial restock status
@@ -34,7 +35,8 @@ def create_product():
 @products_bp.route('/products', methods=['GET'])
 def get_products():
     all_products = Product.query.all()
-    return products_schema.jsonify(all_products)
+    result = products_schema.dump(all_products)
+    return jsonify(result)
 
 @products_bp.route('/products/<int:id>', methods=['GET'])
 def get_product(id):
@@ -55,12 +57,26 @@ def update_product(id):
     if 'price' in data: product.price = data['price']
     if 'total_quantity' in data: product.total_quantity = data['total_quantity']
     if 'available_quantity' in data: product.available_quantity = data['available_quantity']
+    if 'image_url' in data: product.image_url = data['image_url']
     
     # Recalculate restock status if quantities changed
     if 'total_quantity' in data or 'available_quantity' in data:
         StockService.update_restock_status(product)
         
     db.session.commit()
+    return product_schema.jsonify(product)
+
+@products_bp.route('/products/<int:id>/buy', methods=['POST'])
+def buy_product(id):
+    product = Product.query.get_or_404(id)
+    
+    if product.available_quantity < 1:
+        return jsonify({'error': 'Product out of stock'}), 400
+        
+    product.available_quantity -= 1
+    StockService.update_restock_status(product)
+    db.session.commit()
+    
     return product_schema.jsonify(product)
 
 @products_bp.route('/products/<int:id>', methods=['DELETE'])

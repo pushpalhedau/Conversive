@@ -76,4 +76,35 @@ export const productService = {
         }
         return response.json();
     },
+
+    /**
+     * Buy a product (decrement available quantity)
+     */
+    async buyProduct(id: number): Promise<Product> {
+        const response = await fetch(`${API_BASE_URL}/products/${id}/buy`, {
+            method: 'POST',
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Failed to purchase product');
+        }
+        return response.json();
+    },
+
+    /**
+     * Admin login
+     */
+    async login(username: string, password: string): Promise<{ message: string; user: { id: number; username: string } }> {
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        });
+        if (!response.ok) {
+            throw new Error('Invalid credentials');
+        }
+        return response.json();
+    },
 };

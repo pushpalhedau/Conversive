@@ -13,3 +13,4 @@ class ProductSchema(ma.SQLAlchemyAutoSchema):
     total_quantity = fields.Integer(required=True, validate=validate.Range(min=0))
     available_quantity = fields.Integer(required=True, validate=validate.Range(min=0))
     need_restock = fields.Boolean(dump_only=True) # Computed, but can be overridden via specific endpoint
+    image_url = fields.String(allow_none=True)

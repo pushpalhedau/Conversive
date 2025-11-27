@@ -25,6 +25,7 @@ export const ProductForm = ({
             price: 0,
             total_quantity: 0,
             available_quantity: 0,
+            image_url: '',
         }
     );
 
@@ -39,6 +40,7 @@ export const ProductForm = ({
                 price: 0,
                 total_quantity: 0,
                 available_quantity: 0,
+                image_url: '',
             });
         }
     }, [initialData, isOpen]);
@@ -96,6 +98,33 @@ export const ProductForm = ({
                         required
                         className="form-input"
                     />
+                </div>
+
+                <div className="form-group">
+                    <label className="form-label">Image URL (optional)</label>
+                    <input
+                        type="url"
+                        name="image_url"
+                        value={formData.image_url || ''}
+                        onChange={handleChange}
+                        className="form-input"
+                        placeholder="https://example.com/image.jpg"
+                    />
+                    {formData.image_url && (
+                        <div style={{ marginTop: '8px' }}>
+                            <img
+                                src={formData.image_url}
+                                alt="Preview"
+                                style={{
+                                    maxWidth: '100%',
+                                    height: '120px',
+                                    objectFit: 'cover',
+                                    borderRadius: '6px'
+                                }}
+                                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                            />
+                        </div>
+                    )}
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-md)' }}>
