@@ -14,15 +14,6 @@ def create_app(config_class=Config):
     # Enable CORS for all routes
     CORS(app, resources={r"/*": {"origins": "*"}})
 
-    # Manual CORS headers as backup
-    @app.after_request
-    def after_request(response):
-        print(f"Adding CORS headers to response: {response.status}")
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-        return response
-
     # Register Blueprints
     from .api.products import products_bp
     from .api.auth import auth_bp
