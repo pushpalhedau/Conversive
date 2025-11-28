@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useCreateProductMutation, useUpdateProductMutation } from '../../services/api';
-import type { Product, ProductFormData } from '../../types/product';
+import type { Product, ProductFormData } from '../../types/product.types';
 import { X } from 'lucide-react';
 
 interface ProductFormProps {
@@ -24,7 +24,7 @@ export const ProductForm = ({ product, onClose }: ProductFormProps) => {
         if (product) {
             setFormData({
                 name: product.name,
-                description: product.description,
+                description: product.description || '',
                 price: parseFloat(product.price),
                 total_quantity: product.total_quantity,
                 available_quantity: product.available_quantity,
