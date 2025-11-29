@@ -17,8 +17,11 @@ def create_app(config_class=Config):
     # Register Blueprints
     from .api.products import products_bp
     from .api.auth import auth_bp
+    from .api.seed import seed_bp
     app.register_blueprint(products_bp, url_prefix='/api')
     app.register_blueprint(auth_bp, url_prefix='/api')
+    app.register_blueprint(seed_bp, url_prefix='/api')
+
 
     @app.route('/health')
     def health_check():
