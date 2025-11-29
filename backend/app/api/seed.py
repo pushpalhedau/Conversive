@@ -22,6 +22,24 @@ def migrate_database():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@seed_bp.route('/reset-password', methods=['POST'])
+def reset_password():
+    """Force reset admin password - REMOVE IN PRODUCTION"""
+    try:
+        user = User.query.filter_by(username='admin').first()
+        if not user:
+            return jsonify({'error': 'Admin user not found'}), 404
+            
+        # Force set password to 'admin123'
+        user.set_password('admin123')
+        db.session.commit()
+        
+        return jsonify({'message': 'Password reset to: admin123'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+
 @seed_bp.route('/seed-database', methods=['POST'])
 def seed_database():
     """Temporary endpoint to seed database - REMOVE IN PRODUCTION"""
