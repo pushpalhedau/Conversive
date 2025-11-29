@@ -18,6 +18,8 @@ instance/
 .coverage
 htmlcov/
 .env
+.env.docker
+
 
 # Frontend
 node_modules/
