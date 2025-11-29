@@ -15,36 +15,43 @@ services:
     restart: unless-stopped
 
   db:
-    image: mysql:8.0
+    image: postgres:15-alpine
     env_file:
       - .env.docker
     ports:
-      - "3307:3306"
+      - "5432:5432"
     volumes:
-      - db_data:/var/lib/mysql
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-time-zone='+00:00'
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-stock_db}
+      POSTGRES_USER: ${POSTGRES_USER:-stock_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-stock_user} -d ${POSTGRES_DB:-stock_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 30s
     restart: unless-stopped
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+  pgadmin:
+    image: dpage/pgadmin4:latest
     environment:
-      PMA_HOST: db
-    env_file:
-      - .env.docker
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@admin.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
     ports:
       - "8081:80"
     depends_on:
       db:
         condition: service_healthy
     restart: unless-stopped
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
 
 volumes:
   db_data:
     driver: local
+  pgadmin_data:
+    driver: local
+
 
