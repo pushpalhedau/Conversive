@@ -6,6 +6,22 @@ import os
 
 seed_bp = Blueprint('seed', __name__)
 
+@seed_bp.route('/migrate-database', methods=['POST'])
+def migrate_database():
+    """Run database migrations - REMOVE IN PRODUCTION"""
+    try:
+        # Import all models to ensure they're registered
+        from app.models.product import Product
+        from app.models.user import User
+        
+        # Create all tables
+        db.create_all()
+        
+        return jsonify({'message': 'Database migrated successfully!'}), 200
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @seed_bp.route('/seed-database', methods=['POST'])
 def seed_database():
     """Temporary endpoint to seed database - REMOVE IN PRODUCTION"""
