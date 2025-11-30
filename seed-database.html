@@ -20,18 +20,20 @@
             border-radius: 4px;
             cursor: pointer;
             margin: 10px 0;
+            display: block;
+            width: 100%;
         }
 
         button:hover {
             background: #45a049;
         }
 
-        #migrate-result,
-        #result {
-            margin-top: 20px;
+        .result {
+            margin-top: 10px;
             padding: 15px;
             border-radius: 4px;
             font-family: monospace;
+            white-space: pre-wrap;
         }
 
         .success {
@@ -43,6 +45,10 @@
             background: #f8d7da;
             color: #721c24;
         }
+
+        h3 {
+            margin-top: 30px;
+        }
     </style>
 </head>
 
@@ -51,20 +57,24 @@
 
     <h3>Step 1: Run Migrations (Creates Tables)</h3>
     <button onclick="migrateDatabase()">1. Migrate Database</button>
-    <div id="migrate-result"></div>
+    <div id="migrate-result" class="result"></div>
 
-    <h3 style="margin-top: 30px;">Step 2: Seed with Data</h3>
+    <h3>Step 2: Seed with Data</h3>
     <button onclick="seedDatabase()">2. Seed Database</button>
-    <div id="result"></div>
+    <div id="result" class="result"></div>
+
+    <h3>Step 3: Reset Admin Password (If Login Fails)</h3>
+    <button onclick="resetPassword()" style="background: #f44336;">3. Reset Password to 'admin123'</button>
+    <div id="reset-result" class="result"></div>
 
     <script>
-        async function migrateDatabase() {
-            const resultDiv = document.getElementById('migrate-result');
-            resultDiv.textContent = 'Running migrations...';
-            resultDiv.className = '';
+        async function callEndpoint(endpoint, resultId, successMsg) {
+            const resultDiv = document.getElementById(resultId);
+            resultDiv.textContent = 'Processing...';
+            resultDiv.className = 'result';
 
             try {
-                const response = await fetch('https://conversive.onrender.com/api/migrate-database', {
+                const response = await fetch(`https://conversive.onrender.com/api/${endpoint}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -74,44 +84,28 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    resultDiv.textContent = '✅ ' + data.message;
-                    resultDiv.className = 'success';
+                    resultDiv.textContent = '✅ ' + (data.message || successMsg);
+                    resultDiv.className = 'result success';
                 } else {
-                    resultDiv.textContent = '❌ Error: ' + (data.error || data.message);
-                    resultDiv.className = 'error';
+                    resultDiv.textContent = '❌ Error: ' + (data.error || JSON.stringify(data));
+                    resultDiv.className = 'result error';
                 }
             } catch (error) {
                 resultDiv.textContent = '❌ Error: ' + error.message;
-                resultDiv.className = 'error';
+                resultDiv.className = 'result error';
             }
         }
 
-        async function seedDatabase() {
-            const resultDiv = document.getElementById('result');
-            resultDiv.textContent = 'Seeding database...';
-            resultDiv.className = '';
+        function migrateDatabase() {
+            callEndpoint('migrate-database', 'migrate-result', 'Database migrated successfully!');
+        }
 
-            try {
-                const response = await fetch('https://conversive.onrender.com/api/seed-database', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
+        function seedDatabase() {
+            callEndpoint('seed-database', 'result', 'Database seeded successfully!');
+        }
 
-                const data = await response.json();
-
-                if (response.ok) {
-                    resultDiv.textContent = '✅ ' + data.message;
-                    resultDiv.className = 'success';
-                } else {
-                    resultDiv.textContent = '❌ Error: ' + (data.error || data.message);
-                    resultDiv.className = 'error';
-                }
-            } catch (error) {
-                resultDiv.textContent = '❌ Error: ' + error.message;
-                resultDiv.className = 'error';
-            }
+        function resetPassword() {
+            callEndpoint('reset-password', 'reset-result', 'Password reset successfully!');
         }
     </script>
 </body>

@@ -5,9 +5,9 @@
         "backend": {
             "language": "Python 3.11+",
             "framework": "Flask",
-            "database": "MySQL",
+            "database": "PostgreSQL (Neon DB)",
             "orm": "SQLAlchemy",
-            "deployment": "Render"
+            "deployment": "Render (Docker)"
         },
         "frontend": {
             "framework": "React",
@@ -15,7 +15,7 @@
             "build_tool": "Vite",
             "state_management": "Redux Toolkit + RTK Query",
             "styling": "Tailwind CSS",
-            "deployment": "Vercel"
+            "deployment": "Vercel / Docker (Nginx)"
         }
     },
     "database": {
@@ -56,6 +56,30 @@
                         "name": "need_restock",
                         "type": "BOOLEAN",
                         "constraints": "Default False"
+                    },
+                    {
+                        "name": "image_url",
+                        "type": "VARCHAR(255)",
+                        "constraints": "Nullable"
+                    }
+                ]
+            },
+            "user": {
+                "columns": [
+                    {
+                        "name": "id",
+                        "type": "INT",
+                        "constraints": "PK, Auto-increment"
+                    },
+                    {
+                        "name": "username",
+                        "type": "VARCHAR(80)",
+                        "constraints": "Unique, Not Null"
+                    },
+                    {
+                        "name": "password_hash",
+                        "type": "VARCHAR(255)",
+                        "constraints": "Not Null"
                     }
                 ]
             }
@@ -76,54 +100,6 @@
                 "total_quantity": 50,
                 "available_quantity": 5,
                 "need_restock": true
-            },
-            {
-                "name": "USB-C Cable",
-                "description": "2-meter braided USB-C charging cable",
-                "price": 12.50,
-                "total_quantity": 200,
-                "available_quantity": 190,
-                "need_restock": false
-            },
-            {
-                "name": "Monitor Stand",
-                "description": "Adjustable aluminum monitor stand",
-                "price": 45.00,
-                "total_quantity": 30,
-                "available_quantity": 2,
-                "need_restock": true
-            },
-            {
-                "name": "Webcam 1080p",
-                "description": "Full HD webcam with noise-canceling microphone",
-                "price": 59.99,
-                "total_quantity": 75,
-                "available_quantity": 40,
-                "need_restock": false
-            },
-            {
-                "name": "Gaming Headset",
-                "description": "Surround sound gaming headset with mic",
-                "price": 65.00,
-                "total_quantity": 60,
-                "available_quantity": 10,
-                "need_restock": true
-            },
-            {
-                "name": "Laptop Sleeve",
-                "description": "Protective sleeve for 15-inch laptops",
-                "price": 19.99,
-                "total_quantity": 120,
-                "available_quantity": 115,
-                "need_restock": false
-            },
-            {
-                "name": "External SSD 1TB",
-                "description": "Portable 1TB SSD USB 3.2",
-                "price": 129.99,
-                "total_quantity": 40,
-                "available_quantity": 35,
-                "need_restock": false
             }
         ]
     },
@@ -164,6 +140,11 @@
                 "method": "PUT",
                 "path": "/restock/update/{id}",
                 "description": "Manual override restock"
+            },
+            {
+                "method": "POST",
+                "path": "/auth/login",
+                "description": "Admin login"
             },
             {
                 "method": "GET",
@@ -217,18 +198,8 @@
             "acceptance_criteria": "docker-compose up starts all services, hot-reload works.",
             "outputs": [
                 "docker-compose.yml",
-                "backend/Dockerfile"
-            ]
-        },
-        {
-            "id": "E",
-            "title": "Tests + CI",
-            "priority": "MEDIUM",
-            "complexity": "MEDIUM",
-            "acceptance_criteria": "Unit tests for backend/frontend, GitHub Actions workflows for lint/test.",
-            "outputs": [
-                "backend/tests/",
-                ".github/workflows/"
+                "backend/Dockerfile",
+                "frontend/Dockerfile"
             ]
         },
         {
